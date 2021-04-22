@@ -1,13 +1,18 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.response import Response
 from usuarios.models import Usuario
 from usuarios.serializers import UsuarioSerializer
 
+
 # Create your views here.
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def Usuarios(request):
+    permission_classes = [IsAuthenticated]
     if request.method == 'GET':
         usuarios = Usuario.objects.all()
         serializer = UsuarioSerializer(usuarios, many = True)
@@ -21,6 +26,7 @@ def Usuarios(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def DetalleUsuario(request, id):
     try:
         usuario = Usuario.objects.get(id = id)

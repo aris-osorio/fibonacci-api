@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.response import Response
 from resultados.models import Resultado
 from resultados.serializers import ResultadoSerializer
@@ -8,6 +9,7 @@ from resolver.resolver import Resolver
 
 # Create your views here.
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def Resultados(request):
     if request.method == 'GET':
         resultados = Resultado.objects.all()
@@ -40,6 +42,7 @@ def Resultados(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def DetalleResultado(request, id):
     try:
         resultado = Resultado.objects.get(id = id)
