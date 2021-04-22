@@ -9,4 +9,4 @@ class Resultado(models.Model):
     secuencia = models.TextField()
 
     def __str__(self):
-        return self.id
+        return self.numero_entrada
