@@ -75,3 +75,23 @@ def Login(request):
     token, _ = Token.objects.get_or_create(user=usuario)
 
     return Response(token.key, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def Logout(request):
+    try:
+        email = request.POST.get('email')
+    except:
+        return Response("Invalid data", status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        usuario = Usuario.objects.get(email=email)
+    except Usuario.DoesNotExist:
+        return Response("Invalid email", status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        usuario.auth_token.delete()
+    except (AttributeError, ObjectDoesNotExist): 
+        pass
+
+    return Response("Successfully logged out.", status=status.HTTP_200_OK)
