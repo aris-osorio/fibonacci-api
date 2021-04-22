@@ -14,6 +14,9 @@ class Resolver():
         lis = []
         rev = []
 
+        if num == 0:
+            return [0]
+
         while(num > res):
             res = operacion(con)
 

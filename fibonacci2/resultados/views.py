@@ -22,6 +22,9 @@ def Resultados(request):
         except:
             return Response("Invalid data", status=status.HTTP_400_BAD_REQUEST)
         
+        if numero_entrada < 0:
+            return Response("Invalid data: only positive numbers", status=status.HTTP_400_BAD_REQUEST)
+        
         fibonacci = Resolver.fibonacci(numero_entrada)
             
         for elemento in fibonacci:
