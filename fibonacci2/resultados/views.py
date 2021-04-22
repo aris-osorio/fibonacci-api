@@ -17,7 +17,7 @@ def Resultados(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        secuencia = ''
+        secuencia = ' '
 
         try:
             numero_entrada = int(request.POST.get('numero_entrada'))
@@ -30,7 +30,7 @@ def Resultados(request):
         fibonacci = Resolver.fibonacci(numero_entrada)
             
         for elemento in fibonacci:
-            secuencia += str(elemento) +"," 
+            secuencia += str(elemento)+' ' 
         
         serializer = ResultadoSerializer(data = {
             'numero_entrada': numero_entrada,
