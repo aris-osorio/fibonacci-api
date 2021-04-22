@@ -1,9 +1,12 @@
+from django.contrib.auth.hashers import check_password
 from django.shortcuts import render
+
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.response import Response
+
 from usuarios.models import Usuario
 from usuarios.serializers import UsuarioSerializer
 
@@ -47,3 +50,28 @@ def DetalleUsuario(request, id):
     elif request.method == 'DELETE':
         usuario.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
+
+@api_view(['POST'])
+def Login(request):
+    try:
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+    except:
+        return Response("Invalid data", status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        usuario = Usuario.objects.get(email=email)
+    except Usuario.DoesNotExist:
+        return Response("Invalid email", status=status.HTTP_400_BAD_REQUEST)
+    
+    pwd_invalido = check_password(password, usuario.password)
+
+    if not pwd_invalido:
+        return Response("Invalid password", status=status.HTTP_400_BAD_REQUEST)
+    
+    if not usuario.is_active:
+        return Response("email is not active", status=status.HTTP_400_BAD_REQUEST)
+    
+    token, _ = Token.objects.get_or_create(user=usuario)
+
+    return Response(token.key, status=status.HTTP_200_OK)
