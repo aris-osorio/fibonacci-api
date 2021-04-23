@@ -139,7 +139,7 @@ USE_TZ = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOW_HEADERS = ['authorization',]
+CORS_ALLOW_HEADERS = ['Authorization',"Content-type","Access-Control-Allow-Origin","Access-Control-Allow-Methods","Access-Control-Allow-Headers","Access-Control-Allow-Credentials"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
